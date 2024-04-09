@@ -19,7 +19,7 @@ const DeleteBook = () => {
       toast({
         title: "Book deleted successfully",
         description:
-          "Book has been deleted successfully. You can now view it on the main page.",
+          "Book has been deleted successfully. You can now view the changes on the main page.",
         status: "success",
         duration: 3000,
         isClosable: true,
