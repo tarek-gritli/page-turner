@@ -3,26 +3,49 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import AtomicSpinner from "atomic-spinner";
+import {useToast} from "@chakra-ui/react"
 
 const DeleteBook = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
+  const toast = useToast();
 
   const handleDeleteBook = async () => {
     setLoading(true);
     try {
       await axios.delete(`http://localhost:3000/books/${id}`);
       setLoading(false);
+      toast({
+        title: "Book deleted successfully",
+        description:
+          "Book has been deleted successfully. You can now view it on the main page.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       navigate("/books");
     } catch (error) {
       setLoading(false);
-      console.error("Error editing book:", error);
+      console.error("Error deleting book:", error);
+      toast({
+        title: "An error occurred",
+        description:
+          "An error occurred while deleting the book. Please try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
   return (
     <>
+      {loading && (
+        <div className="flex justify-center items-center h-screen">
+          <AtomicSpinner />
+        </div>
+      )}
       <BackButton />
       <div className="flex justify-center items-center h-screen text-center">
         <div className="p-6 border border-gray-300 rounded">

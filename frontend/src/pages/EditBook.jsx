@@ -5,6 +5,7 @@ import BackButton from "../components/BackButton";
 import { handleInputChange, validateInputs } from "../utils/helpers";
 import BookForm from "../components/BookForm";
 import AtomicSpinner from "atomic-spinner";
+import {useToast} from "@chakra-ui/react"
 
 const EditBook = () => {
   const [bookData, setBookData] = useState({
@@ -20,6 +21,7 @@ const EditBook = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const { id } = useParams();
+  const toast = useToast()
 
   useEffect(() => {
     const fetchBook = async () => {
@@ -45,9 +47,23 @@ const EditBook = () => {
     try {
       await axios.put(`http://localhost:3000/books/${id}`, bookData);
       setLoading(false)
+      toast({
+        title: "Book updated successfully",
+        description: "Book has been updated successfully. You can now view it on the main page.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      })
       navigate("/books");
     } catch (error) {
       setLoading(false)
+      toast({
+        title: "An error occurred",
+        description: "An error occurred while updating the book. Please try again later.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
       console.error("Error editing book:", error);
     }
   };
